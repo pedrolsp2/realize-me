@@ -42,7 +42,11 @@ export const fetchAllDreams = () => {
     .then((querySnapshot) => {
       const dreams = [];
       querySnapshot.forEach((doc) => {
-        dreams.push(doc.data());
+        const dream = {
+          id: doc.id,
+          ...doc.data()
+        };
+        dreams.push(dream);
       });
       return dreams;
     })
@@ -51,3 +55,4 @@ export const fetchAllDreams = () => {
       return [];
     });
 };
+

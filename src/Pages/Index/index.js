@@ -13,7 +13,7 @@ const Index = () => {
 
   useEffect(() => {
     fetchData();
-  }, [data]);
+  }, []);
 
   const openModal = () => {
     setModalIsOpen(true);

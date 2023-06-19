@@ -98,6 +98,21 @@ body {
   }
   
   @media screen and (max-width: 600px) { 
+    .welcome{
+      flex-direction: column;
+    }
+
+    .msg h1 {
+      font-size: 1.1em;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .msg p{
+      font-size: .8em;
+    }
+    
+
     .row{
       display: block; 
     }
