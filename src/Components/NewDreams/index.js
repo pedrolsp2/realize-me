@@ -44,7 +44,9 @@ export const NewDreams = ({ closeModal }) => {
         </div>
         <div className="form-group">
           <label htmlFor="image">Imagem</label>
-          <div className="view-img"></div>
+          <div className="view-img">
+            <img src={image} className='view-img'/>
+          </div>
           <input
             type="text"
             id="image"

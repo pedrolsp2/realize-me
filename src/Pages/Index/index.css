@@ -1,5 +1,5 @@
 body {
-    background: url('../../assets/background.png') no-repeat;
+    background: url('../../assets/background.png') #0D121D no-repeat;
     background-size: cover; 
     color: #fff;
   } 
@@ -83,3 +83,37 @@ body {
     text-align: center;
   }
   
+  @media screen and (max-width: 800px) { 
+    .row{
+      display: block; 
+    }
+
+    .dreams,.painting-dreams{
+      width: 100%;
+    }
+
+    .painting-dreams{
+      margin-top: .5em;
+    }
+  }
+  
+  @media screen and (max-width: 600px) { 
+    .row{
+      display: block; 
+    }
+
+    .dreams,.painting-dreams{
+      width: 100%;
+      display: block;
+      gap: .5em;
+    }
+
+    .container-dreams{ 
+      width: 100% !important; 
+    }
+
+    .container-dreams :not(:first-child) {
+      margin: 1em 0;
+    }
+    
+  }
