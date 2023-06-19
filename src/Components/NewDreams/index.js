@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Axios from 'axios';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
+import { handleSubmitNewDreams } from '../../server/query/query.js';
 
 import './newDreams.css';
 
@@ -10,17 +10,26 @@ export const NewDreams = ({ closeModal }) => {
   const [image, setImage] = useState('');
   const [date, setDate] = useState('');
 
-  const handleSubmit = () => {
-    Axios.post("http://localhost:3001/register",{
-        sonho:dream,
-        foto:image,
-        descricao:description,
-        data: date,
-    }).then((res)=>{
-        console.log(res)
-    })
-    closeModal()
+  const handleFormSubmit = (event) => {
+    event.preventDefault();
+    const dreamData = {
+      sonho: dream,
+      descricao: description,
+      foto: image,
+      date: date
+    };
+    handleSubmitNewDreams(event, dreamData)
+      .then((result) => {
+        if (result.success) {
+          closeModal()
+        } else {
+        }
+      })
+      .catch((error) => {
+        console.error('Erro ao chamar a função handleSubmitNewDreams:', error);
+      });
   };
+  
 
   return (
     <div className="modal-content">
@@ -75,7 +84,7 @@ export const NewDreams = ({ closeModal }) => {
           />
         </div>
         <div className="form-actions">
-          <button type="submit" onClick={handleSubmit}>Salvar</button>
+          <button type="submit" onClick={handleFormSubmit}>Salvar</button>
         </div>
       </div>
     </div>
