@@ -1,16 +1,17 @@
 import React, { useState, useRef } from 'react';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { handleSubmitNewDreams, handleNewFile } from '../../server/query/query.js';
+import { toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 import './newDreams.css';
 
-export const NewDreams = ({ closeModal }) => {
+export const NewDreams = ({ closeModal, updateData }) => {
   const [dream, setDream] = useState('');
   const [description, setDescription] = useState('');
   const [previewImage, setPreviewImage] = useState('');
   const [image, setImage] = useState('');
-  const [date, setDate] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [date, setDate] = useState(''); 
   const fileInputRef = useRef();
 
   const handleFormSubmit = async (event) => {
@@ -24,20 +25,25 @@ export const NewDreams = ({ closeModal }) => {
         foto: imageUrl,
         date: date,
       };
-
-      setIsLoading(true);
+      const progress = toast.info('Enviando sonho...', {
+        position: toast.POSITION.TOP_LEFT,
+        autoClose: false,
+        hideProgressBar: false,
+      });
 
       handleSubmitNewDreams(event, dreamData)
         .then((result) => {
           if (result.success) {
+            toast.dismiss(progress);
             closeModal();
+            updateData(); // Chama a função de atualização dos dados no componente pai
+          } else {
+            toast.dismiss(progress);
           }
         })
         .catch((error) => {
+          toast.dismiss(progress);
           console.error('Erro ao chamar a função handleSubmitNewDreams:', error);
-        })
-        .finally(() => {
-          setIsLoading(false);
         });
     } catch (error) {
       console.error('Erro ao fazer o upload da imagem:', error);
@@ -111,23 +117,14 @@ export const NewDreams = ({ closeModal }) => {
                 accept="image/jpeg, image/png"
                 style={{ display: 'none' }}
               />
-              <button
-                type="button"
-                className="upload-button"
-                onClick={handleButtonClick}
-                disabled={isLoading}
-              >
-                {isLoading ? 'Carregando...' : 'Selecionar Arquivo'}
+              <button type="button" className="upload-button" onClick={handleButtonClick}>
+                Selecionar Arquivo
               </button>
             </div>
           </div>
           <div className="form-actions">
-            <button
-              type="submit"
-              onClick={handleFormSubmit}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Salvando...' : 'Salvar'}
+            <button type="submit" onClick={handleFormSubmit}>
+              Salvar
             </button>
           </div>
         </form>

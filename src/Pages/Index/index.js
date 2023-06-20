@@ -13,17 +13,18 @@ const Index = () => {
   const [uploadedImageUrl, setUploadedImageUrl] = useState('');
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const dreamsData = await fetchAllDreams();
-        setData(dreamsData);
-      } catch (error) {
-        console.error('Erro ao resgatar os sonhos:', error);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const dreamsData = await fetchAllDreams();
+      setData(dreamsData);
+      console.log(dreamsData)
+    } catch (error) {
+      console.error('Erro ao resgatar os sonhos:', error);
+    }
+  };
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -36,6 +37,10 @@ const Index = () => {
 
   const handleImageUpload = (imageUrl) => {
     setUploadedImageUrl(imageUrl);
+  };
+
+  const updateData = () => {
+    fetchData();
   };
 
   const modalStyles = {
@@ -69,7 +74,7 @@ const Index = () => {
             {data.length > 0 ? (
               data.slice(0, 4).map((item, index) => <Card key={index} data={item} className='card' />)
             ) : (
-              <p className='empty'>Você ainda não tem sonhos cadastrado.</p>
+              <p className='empty'>Você ainda não tem sonhos cadastrados.</p>
             )}
           </div>
           <div className='card painting-dreams'>
@@ -85,7 +90,7 @@ const Index = () => {
         onRequestClose={closeModal}
         style={modalStyles}
       >
-        <NewDreams closeModal={closeModal} handleImageUpload={handleImageUpload} />
+        <NewDreams closeModal={closeModal} handleImageUpload={handleImageUpload} updateData={updateData} />
       </Modal>
     </div>
   );

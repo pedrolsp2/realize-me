@@ -70,4 +70,18 @@ export const handleNewFile = async (image) => {
 };
 
 
+export const deleteDocumentById = async (documentId) => {
+  try {
+    const collectionRef = firebase.firestore().collection('sonhos');
+    const documentRef = collectionRef.doc(documentId);
 
+    await documentRef.delete();
+    toast.success("Sucesso ao excluir!", {
+      position: toast.POSITION.TOP_LEFT
+    })
+  } catch (error) {
+    toast.error("Erro ao excluir", {
+      position: toast.POSITION.TOP_LEFT
+    })
+  }
+};

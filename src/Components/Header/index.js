@@ -8,7 +8,7 @@ function Header() {
     <header>
         <nav>
           <img src={Logo} alt='Logo'/>
-          <FaUserCircle size={52} color='#89ABC0'/>
+          <FaUserCircle size={40} color='#89ABC0'/>
         </nav>
     </header>
   );
