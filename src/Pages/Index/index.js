@@ -72,7 +72,7 @@ const Index = () => {
         <div className='row'>
           <div className='card dreams'>
             {data.length > 0 ? (
-              data.slice(0, 4).map((item, index) => <Card key={index} data={item} className='card' />)
+              data.slice(0, 4).map((item, index) => <Card key={index} data={item} className='card' updateData={updateData} />)
             ) : (
               <p className='empty'>Você ainda não tem sonhos cadastrados.</p>
             )}

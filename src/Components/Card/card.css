@@ -59,6 +59,7 @@
   }
   
   .container-dreams.pressed .delete-icon,
+  .container-dreams.pressed .edit-icon,
   .container-dreams.pressed .close-icon {
     color: #fff;
     margin-right: 10px;
@@ -66,6 +67,13 @@
     transition: color 0.3s ease-in-out;
   }
 
+  .container-dreams.pressed .close-icon{
+    color: #f76464;
+  }
+
+  .container-dreams.pressed .edit-icon{
+    color: #7890AB;
+  }
   
   .container-dreams.pressed .close-icon {
     position: absolute;
@@ -73,11 +81,21 @@
     right: 5px;
   } 
   
+  .container-dreams.pressed .edit-icon {
+    position: absolute;
+    top: 2px;
+    right: 40px;
+  } 
+  
   .container-dreams.pressed .delete-icon:hover{
     color: #62C46B;
-}
+  }
+  
+  .container-dreams.pressed .edit-icon:hover{
+    color: #FECB42;
+  }
 
   .container-dreams.pressed .close-icon:hover {
-    color: #FF5A5A;
+    color: #b81d1d;
   }
   

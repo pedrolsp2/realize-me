@@ -1,53 +1,74 @@
 import React, { useState, useRef } from 'react';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
-import { handleSubmitNewDreams, handleNewFile } from '../../server/query/query.js';
+import { handleSubmitNewDreams, handleNewFile, handleEditDocumentById } from '../../server/query/query.js';
 import { toast } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 
 import './newDreams.css';
 
-export const NewDreams = ({ closeModal, updateData }) => {
-  const [dream, setDream] = useState('');
-  const [description, setDescription] = useState('');
-  const [previewImage, setPreviewImage] = useState('');
-  const [image, setImage] = useState('');
-  const [date, setDate] = useState(''); 
+export const NewDreams = ({ closeModal, updateData, dataId , actionFrom, pDream, pDescription, pImage, pDate }) => {
+  const [dream, setDream] = useState(pDream);
+  const [description, setDescription] = useState(pDescription);
+  const [previewImage, setPreviewImage] = useState(pImage);
+  const [image, setImage] = useState(pImage);
+  const [date, setDate] = useState(pDate); 
+  const [url, setUrl] = useState(pImage)
+  const [upd, setUpd] = useState(updateData)
   const fileInputRef = useRef();
-
+  
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const imageUrl = await handleNewFile(image);
-      console.log(imageUrl);
-      const dreamData = {
-        sonho: dream,
-        descricao: description,
-        foto: imageUrl,
-        date: date,
-      };
-      const progress = toast.info('Enviando sonho...', {
-        position: toast.POSITION.TOP_LEFT,
-        autoClose: false,
-        hideProgressBar: false,
-      });
+    if(actionFrom === 'new'){
+        try {
+          const imageUrl = await handleNewFile(image);
+          console.log(imageUrl);
+          const dreamData = {
+            sonho: dream,
+            descricao: description,
+            foto: imageUrl,
+            date: date,
+          };
+          const progress = toast.info('Enviando sonho...', {
+            position: toast.POSITION.TOP_LEFT,
+            autoClose: false,
+            hideProgressBar: false,
+          });
 
-      handleSubmitNewDreams(event, dreamData)
-        .then((result) => {
-          if (result.success) {
-            toast.dismiss(progress);
-            closeModal();
-            updateData(); // Chama a função de atualização dos dados no componente pai
-          } else {
-            toast.dismiss(progress);
-          }
+          handleSubmitNewDreams(event, dreamData)
+            .then((result) => {
+              if (result.success) {
+                toast.dismiss(progress);
+                closeModal();
+                updateData();
+              } else {
+                toast.dismiss(progress);
+              }
+            })
+            .catch((error) => {
+              toast.dismiss(progress);
+              console.error('Erro ao chamar a função handleSubmitNewDreams:', error);
+            });
+        } catch (error) {
+          console.error('Erro ao fazer o upload da imagem:', error);
+        }
+      }
+      else{
+        const dreamData = {
+          sonho: dream,
+          descricao: description, 
+          foto: url,
+          data: date,
+        };
+        console.log('id',dataId,"dados",dreamData)
+        handleEditDocumentById(dataId,dreamData)
+        .then(() => {
+          closeModal();
+          upd();
         })
         .catch((error) => {
-          toast.dismiss(progress);
-          console.error('Erro ao chamar a função handleSubmitNewDreams:', error);
+          console.error('Erro ao editar:', error);
         });
-    } catch (error) {
-      console.error('Erro ao fazer o upload da imagem:', error);
-    }
+      }
   }
 
   const handleButtonClick = () => {

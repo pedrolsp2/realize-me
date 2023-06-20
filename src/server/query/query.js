@@ -69,7 +69,6 @@ export const handleNewFile = async (image) => {
   return imageUrl;
 };
 
-
 export const deleteDocumentById = async (documentId) => {
   try {
     const collectionRef = firebase.firestore().collection('sonhos');
@@ -83,5 +82,28 @@ export const deleteDocumentById = async (documentId) => {
     toast.error("Erro ao excluir", {
       position: toast.POSITION.TOP_LEFT
     })
+  }
+};
+
+export const handleEditDocumentById = async (documentId, dreamData) => {
+  try {
+    const collectionRef = firebase.firestore().collection('sonhos');
+    const documentRef = collectionRef.doc(documentId);
+
+    await documentRef.update({
+      sonho: dreamData.sonho,
+      descricao: dreamData.descricao,
+      foto: dreamData.foto,
+      data: dreamData.data,
+    });
+
+    toast.success("Sucesso ao editar!", {
+      position: toast.POSITION.TOP_LEFT
+    });
+  } catch (error) {
+    console.log(error)
+    toast.error(`Erro ao editar`, {
+      position: toast.POSITION.TOP_LEFT
+    });
   }
 };
