@@ -1,8 +1,10 @@
 import firebase from '../firebase/firebaseconfig'
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
+import { v4 as uuidv4 } from 'uuid';
 import "react-toastify/dist/ReactToastify.css";
 
 const db = firebase.firestore();
+const storage = firebase.storage();
 const colecaoSonhos = db.collection('sonhos');
 
 export const handleSubmitNewDreams = (event, dreamData) => {
@@ -55,4 +57,17 @@ export const fetchAllDreams = () => {
       return [];
     });
 };
+
+export const handleNewFile = async (image) => {
+  const storageRef = storage.ref('img-sonhos');
+  const imageName = `${uuidv4()}-${image.name}`;
+  const imageRef = storageRef.child(imageName);
+  await imageRef.put(image);
+  
+  const imageUrl = await imageRef.getDownloadURL();
+
+  return imageUrl;
+};
+
+
 

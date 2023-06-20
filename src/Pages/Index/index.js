@@ -10,8 +10,18 @@ import { fetchAllDreams } from '../../server/query/query';
 const Index = () => {
   const [data, setData] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState('');
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const dreamsData = await fetchAllDreams();
+        setData(dreamsData);
+      } catch (error) {
+        console.error('Erro ao resgatar os sonhos:', error);
+      }
+    };
+
     fetchData();
   }, []);
 
@@ -19,15 +29,14 @@ const Index = () => {
     setModalIsOpen(true);
   };
 
-  const fetchData = async() => {
-    try {
-      const dreamsData = await fetchAllDreams();
-      setData(dreamsData);
-    } catch (error) {
-      console.error('Erro ao resgatar os sonhos:', error);
-    }
+  const closeModal = () => {
+    setModalIsOpen(false);
+    setUploadedImageUrl('');
   };
 
+  const handleImageUpload = (imageUrl) => {
+    setUploadedImageUrl(imageUrl);
+  };
 
   const modalStyles = {
     overlay: {
@@ -48,20 +57,20 @@ const Index = () => {
       <main>
         <div className='row'>
           <div className='card welcome'>
-            <img src={Persona} alt='Uusario' />
+            <img src={Persona} alt='Usuário' />
             <div className='msg'>
-              <h1>Olá! Como está seus sonhos?</h1>
-              <p>
-                Veja abaixo um histórico do quadro dos sonhos... E, ah! Caso haja mais, coloque aqui!
-              </p>
+              <h1>Olá! Como estão seus sonhos?</h1>
+              <p>Veja abaixo um histórico do quadro dos sonhos... E, ah! Caso haja mais, coloque aqui!</p>
             </div>
           </div>
         </div>
         <div className='row'>
           <div className='card dreams'>
-            {data.map((item, index) => (
-              <Card key={index} data={item} className='card' />
-            ))}
+            {data.length > 0 ? (
+              data.slice(0, 4).map((item, index) => <Card key={index} data={item} className='card' />)
+            ) : (
+              <p className='empty'>Você ainda não tem sonhos cadastrado.</p>
+            )}
           </div>
           <div className='card painting-dreams'>
             <span>
@@ -73,9 +82,10 @@ const Index = () => {
       </main>
       <Modal
         isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        style={modalStyles}>
-        <NewDreams closeModal={() => setModalIsOpen(false)} />
+        onRequestClose={closeModal}
+        style={modalStyles}
+      >
+        <NewDreams closeModal={closeModal} handleImageUpload={handleImageUpload} />
       </Modal>
     </div>
   );
