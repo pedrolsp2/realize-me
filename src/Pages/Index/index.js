@@ -90,7 +90,7 @@ const Index = () => {
         onRequestClose={closeModal}
         style={modalStyles}
       >
-        <NewDreams closeModal={closeModal} handleImageUpload={handleImageUpload} updateData={updateData} />
+        <NewDreams closeModal={closeModal} handleImageUpload={handleImageUpload} updateData={updateData} actionFrom={"new"}/>
       </Modal>
     </div>
   );

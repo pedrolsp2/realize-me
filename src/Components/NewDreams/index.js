@@ -13,45 +13,54 @@ export const NewDreams = ({ closeModal, updateData, dataId , actionFrom, pDream,
   const [image, setImage] = useState(pImage);
   const [date, setDate] = useState(pDate); 
   const [url, setUrl] = useState(pImage)
-  const [upd, setUpd] = useState(updateData)
   const fileInputRef = useRef();
   
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    
-        try {
-          const imageUrl = await handleNewFile(image);
-          console.log(imageUrl);
+        if(actionFrom == "new"){
+          try {
+            const imageUrl = await handleNewFile(image);
+            setUrl(imageUrl);
+            const dreamData = {
+              sonho: dream,
+              descricao: description,
+              foto: imageUrl,
+              date: date,
+            };
+            const progress = toast.info('Enviando sonho...', {
+              position: toast.POSITION.TOP_LEFT,
+              autoClose: false,
+              hideProgressBar: false,
+            });
+  
+            handleSubmitNewDreams(event, dreamData)
+              .then((result) => {
+                if (result.success) {
+                  toast.dismiss(progress);
+                  closeModal();
+                  updateData();
+                } else {
+                  toast.dismiss(progress);
+                }
+              })
+              .catch((error) => {
+                toast.dismiss(progress);
+                console.error('Erro ao chamar a função handleSubmitNewDreams:', error);
+              });
+          } catch (error) {
+            console.error('Erro ao fazer o upload da imagem:', error);
+          }
+        }
+        else{
           const dreamData = {
             sonho: dream,
             descricao: description,
-            foto: imageUrl,
-            date: date,
+            foto: url,
+            data: date,
           };
-          const progress = toast.info('Enviando sonho...', {
-            position: toast.POSITION.TOP_LEFT,
-            autoClose: false,
-            hideProgressBar: false,
-          });
-
-          handleSubmitNewDreams(event, dreamData)
-            .then((result) => {
-              if (result.success) {
-                toast.dismiss(progress);
-                closeModal();
-                updateData();
-              } else {
-                toast.dismiss(progress);
-              }
-            })
-            .catch((error) => {
-              toast.dismiss(progress);
-              console.error('Erro ao chamar a função handleSubmitNewDreams:', error);
-            });
-        } catch (error) {
-          console.error('Erro ao fazer o upload da imagem:', error);
-        }
-      
+          handleEditDocumentById(dataId,dreamData)
+         // updateData()
+        }      
   }
 
   const handleButtonClick = () => {

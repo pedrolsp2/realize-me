@@ -102,6 +102,7 @@ export const handleEditDocumentById = async (documentId, dreamData) => {
     });
   } catch (error) {
     console.log(error)
+    console.log(error)
     toast.error(`Erro ao editar`, {
       position: toast.POSITION.TOP_LEFT
     });
