@@ -18,7 +18,7 @@ export const NewDreams = ({ closeModal, updateData, dataId , actionFrom, pDream,
   
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    if(actionFrom === 'new'){
+    
         try {
           const imageUrl = await handleNewFile(image);
           console.log(imageUrl);
@@ -51,24 +51,7 @@ export const NewDreams = ({ closeModal, updateData, dataId , actionFrom, pDream,
         } catch (error) {
           console.error('Erro ao fazer o upload da imagem:', error);
         }
-      }
-      else{
-        const dreamData = {
-          sonho: dream,
-          descricao: description, 
-          foto: url,
-          data: date,
-        };
-        console.log('id',dataId,"dados",dreamData)
-        handleEditDocumentById(dataId,dreamData)
-        .then(() => {
-          closeModal();
-          upd();
-        })
-        .catch((error) => {
-          console.error('Erro ao editar:', error);
-        });
-      }
+      
   }
 
   const handleButtonClick = () => {
